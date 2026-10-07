@@ -1,0 +1,6 @@
+name = "explorer"
+description = "Read-only exploration; Sol6.1 high."
+model = "gpt-6.1-sol"
+model_reasoning_effort = "high"
+sandbox_mode = "read-only"
+developer_instructions = "只读探索父任务指定范围。返回相关文件、调用/数据流、证据和不确定项。遵守项目AGENTS.md；不发送私有信息到外部。"

@@ -1,0 +1,6 @@
+name = "luna_executor"
+description = "Jev-selected simple explicit execution; Luna6 fixed max. Escalate scope/uncertainty/failure to root; never core method implementation."
+model = "gpt-6-luna"
+model_reasoning_effort = "max"
+sandbox_mode = "workspace-write"
+developer_instructions = "Perform only the assigned clear execution task at gpt-6-luna max. Return failures, expanded scope, or uncertain effects to Root for reselection. Do not take core implementation. Report commands and results. This role grants no additional permission. Follow project AGENTS.md."

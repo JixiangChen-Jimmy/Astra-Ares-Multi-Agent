@@ -1,0 +1,8 @@
+{
+  "provider": "openrouter",
+  "apiKeyEnv": "OPENROUTER_API_KEY",
+  "mode": "adaptive",
+  "maxLeaseSteps": 5,
+  "routeProvider": "typesafe",
+  "routeApiKeyEnv": "TYPESAFE_API_KEY"
+}

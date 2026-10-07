@@ -1,0 +1,56 @@
+{
+  "name": "astra-ares-multi-agent",
+  "version": "0.3.0",
+  "description": "Adaptive Jev effort and optional routed Codex agents in one portable profile.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "ares": "bin/ares.mjs",
+    "astra-ares": "bin/astra-ares.mjs"
+  },
+  "files": [
+    "bin/*.mjs",
+    "src/*.mjs",
+    "profiles/ROOT_POLICY.md",
+    "profiles/agents/*.toml",
+    "routing/*.py",
+    "routing/*.json",
+    "routing/*.md",
+    "scripts/build-codex.mjs",
+    "patches",
+    "README.md",
+    "README.zh-CN.md",
+    "LICENSE",
+    "assets",
+    "THIRD_PARTY_NOTICES.md",
+    "config.example.json",
+    "docs",
+    "ci/README.md",
+    "ci/workflows/*.yml"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "setup": "node bin/ares.mjs setup",
+    "doctor": "node bin/ares.mjs doctor",
+    "format": "prettier --write 'src/*.mjs' 'bin/*.mjs' 'scripts/*.mjs' 'test/*.mjs' 'test/native/*.mjs' '*.json' '*.md' 'docs/*.md' 'ci/workflows/*.yml'",
+    "test:native": "bun scripts/test-native.mjs",
+    "start": "node bin/astra-ares.mjs"
+  },
+  "dependencies": {
+    "gpt-tokenizer": "4.0.0"
+  },
+  "devDependencies": {
+    "prettier": "3.6.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JixiangChen-Jimmy/Astra-Ares-Multi-Agent.git"
+  },
+  "homepage": "https://github.com/JixiangChen-Jimmy/Astra-Ares-Multi-Agent#readme",
+  "bugs": {
+    "url": "https://github.com/JixiangChen-Jimmy/Astra-Ares-Multi-Agent/issues"
+  }
+}

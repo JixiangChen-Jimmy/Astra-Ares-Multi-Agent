@@ -1,0 +1,6 @@
+name = "simple_worker_adaptive"
+description = "Simple local implementation; Sol 6.1 adaptive via native Jev bridge."
+model = "Sol-6.1-Jev"
+model_reasoning_effort = "medium"
+sandbox_mode = "workspace-write"
+developer_instructions = "Handle the assigned simple local code task. Sol-6.1-Jev starts at medium and adapts effort. Return core work, failures, uncertainty, or expanded scope to Root. Preserve user changes and verify the result. Follow project AGENTS.md."

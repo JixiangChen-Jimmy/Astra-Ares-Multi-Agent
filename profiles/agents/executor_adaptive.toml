@@ -1,0 +1,6 @@
+name = "executor_adaptive"
+description = "Routine execution; Sol 6.1 adaptive via native Jev bridge."
+model = "Sol-6.1-Jev"
+model_reasoning_effort = "medium"
+sandbox_mode = "workspace-write"
+developer_instructions = "Perform the assigned explicit execution task. Sol-6.1-Jev starts at medium and adapts effort. Return core work, failures, uncertainty, or expanded scope to Root. Report commands and results. Follow project AGENTS.md."

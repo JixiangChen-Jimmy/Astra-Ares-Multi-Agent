@@ -1,0 +1,127 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import {
+  mkdtempSync,
+  readFileSync,
+  writeFileSync,
+  statSync,
+  rmSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
+import { spawnSync } from "node:child_process";
+const cli = resolve("bin/ares.mjs");
+function invoke(args, env, input) {
+  return spawnSync(process.execPath, [cli, ...args], {
+    env: { ...process.env, ...env },
+    input,
+    encoding: "utf8",
+  });
+}
+for (const provider of ["vercel", "openrouter"])
+  test(`${provider} configure accepts a piped key, keeps it private and prints no secret`, () => {
+    const dir = mkdtempSync(join(tmpdir(), "jev-config-"));
+    const file = join(dir, "config.json");
+    const env = { ARES_CONFIG: file, ARES_HOME: join(dir, "data") };
+    try {
+      const key = "vck_private_fixture_value";
+      const r = invoke(
+        ["configure", "--provider", provider, "--key-stdin"],
+        env,
+        key + "\n",
+      );
+      assert.equal(r.status, 0, r.stderr);
+      assert(!r.stdout.includes(key));
+      assert(!r.stderr.includes(key));
+      assert.equal(JSON.parse(readFileSync(file, "utf8")).apiKey, key);
+      assert.equal(JSON.parse(readFileSync(file, "utf8")).provider, provider);
+      assert.equal(statSync(file).mode & 0o777, 0o600);
+      const doctor = invoke(["doctor"], env);
+      assert.equal(doctor.status, 1);
+      assert.match(doctor.stderr, /Patched Codex is missing/);
+      assert(!doctor.stderr.includes(key));
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+test("unknown CLI options fail visibly", () => {
+  const r = invoke(["setup", "--mystery"], {});
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /Unknown/);
+});
+test("new configurations default to OpenRouter; replacing a key preserves an explicit provider", () => {
+  const dir = mkdtempSync(join(tmpdir(), "ares-default-provider-"));
+  const file = join(dir, "config.json");
+  const env = { ARES_CONFIG: file, ARES_HOME: join(dir, "data") };
+  try {
+    const first = invoke(["configure", "--key-stdin"], env, "fixture-first\n");
+    assert.equal(first.status, 0, first.stderr);
+    assert.equal(JSON.parse(readFileSync(file, "utf8")).provider, "openrouter");
+    const change = invoke(
+      ["configure", "--provider", "typesafe", "--key-stdin"],
+      env,
+      "fixture-second\n",
+    );
+    assert.equal(change.status, 0, change.stderr);
+    const replace = invoke(
+      ["configure", "--key-stdin"],
+      env,
+      "fixture-third\n",
+    );
+    assert.equal(replace.status, 0, replace.stderr);
+    const saved = JSON.parse(readFileSync(file, "utf8"));
+    assert.equal(saved.provider, "typesafe");
+    assert.equal(saved.apiKey, "fixture-third");
+    const location = invoke(["config-path"], env);
+    assert.equal(location.status, 0, location.stderr);
+    assert.equal(location.stdout.trim(), file);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+test("configuration parse failures never echo credential fragments", () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-invalid-config-"));
+  const file = join(dir, "config.json");
+  const secret = "vck_private_invalid_json_fixture";
+  try {
+    writeFileSync(file, '{"apiKey":"' + secret + '", invalid}');
+    for (const command of ["setup", "configure", "doctor"]) {
+      const result = invoke([command], { ARES_CONFIG: file });
+      assert.equal(result.status, 1);
+      assert.match(result.stderr, /valid JSON configuration/);
+      assert(!result.stderr.includes(secret));
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+test("options for a different command fail instead of being ignored", () => {
+  const result = invoke(["doctor", "--provider", "typesafe"], {});
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /not supported by doctor/);
+});
+
+test("setup rejects an adopted Astra-only binary without overwriting it", () => {
+  const dir = mkdtempSync(join(tmpdir(), "ares-old-binary-"));
+  const binary = join(dir, "codex");
+  const file = join(dir, "config.json");
+  const old =
+    "CODEX_STEP_CONTROLLER_CONTEXT_V3\nAstra-Jev requires its bridge\n";
+  try {
+    writeFileSync(binary, old);
+    writeFileSync(
+      file,
+      JSON.stringify({ provider: "openrouter", codexBinary: binary }),
+    );
+    const result = invoke(["setup"], {
+      ARES_CONFIG: file,
+      ARES_HOME: join(dir, "data"),
+    });
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /Configured codexBinary is incompatible/);
+    assert.match(result.stderr, /setup --binary/);
+    assert.equal(readFileSync(binary, "utf8"), old);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});

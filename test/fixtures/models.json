@@ -1,0 +1,53 @@
+{
+  "models": [
+    {
+      "slug": "gpt-6-astra",
+      "display_name": "Fixture Astra",
+      "description": "Synthetic metadata for native boundary tests",
+      "default_reasoning_level": "medium",
+      "supported_reasoning_levels": [
+        {
+          "effort": "low",
+          "description": "low"
+        },
+        {
+          "effort": "medium",
+          "description": "medium"
+        },
+        {
+          "effort": "high",
+          "description": "high"
+        }
+      ],
+      "shell_type": "shell_command",
+      "visibility": "list",
+      "minimal_client_version": [
+        0,
+        1,
+        0
+      ],
+      "supported_in_api": true,
+      "priority": 0,
+      "upgrade": null,
+      "model_messages": {
+        "instructions_template": "You are a local test fixture.",
+        "instructions_variables": null,
+        "approvals": null,
+        "auto_review": null,
+        "permissions": null
+      },
+      "support_verbosity": false,
+      "default_verbosity": null,
+      "apply_patch_tool_type": null,
+      "truncation_policy": {
+        "mode": "bytes",
+        "limit": 40000
+      },
+      "supports_image_detail_original": false,
+      "context_window": 272000,
+      "max_context_window": 272000,
+      "experimental_supported_tools": [],
+      "use_responses_lite": true
+    }
+  ]
+}

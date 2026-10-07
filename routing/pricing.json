@@ -1,0 +1,40 @@
+{
+  "verified_date": "2026-10-07",
+  "source": {
+    "luna": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+    "sol": "https://developers.openai.com/api/docs/models/gpt-6.1-sol"
+  },
+  "currency": "USD",
+  "unit": "per 1,000,000 tokens",
+  "standard_at_or_below_272k_context": {
+    "gpt-6-luna": {
+      "input": 0.1,
+      "cached_input": 0.01,
+      "cache_write": 0.125,
+      "output": 0.5
+    },
+    "gpt-6.1-sol": {
+      "input": 2.0,
+      "cached_input": 0.1,
+      "cache_write": 2.5,
+      "output": 10.0
+    }
+  },
+  "above_272k_context": {
+    "applies_to": "entire_request",
+    "input_cached_input_cache_write_multiplier": 2,
+    "output_multiplier": 1.5
+  },
+  "service_tier_multipliers": {
+    "standard": 1,
+    "fast": 2,
+    "batch": 0.5,
+    "flex": 0.5
+  },
+  "regional_processing_multiplier_where_available": 1.1,
+  "standard_pricing_input_threshold_tokens": 272000,
+  "installed_codex_context_limit_tokens": 272000,
+  "api_advertised_context_tokens": 1050000,
+  "effort_price_note": "The listed token rates do not vary by reasoning effort; actual token use and success/rework do.",
+  "actual_provider_billing": "unknown"
+}

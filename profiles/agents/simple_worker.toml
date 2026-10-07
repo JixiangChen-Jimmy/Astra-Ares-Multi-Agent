@@ -1,0 +1,8 @@
+name = "simple_worker"
+description = "Simple bounded code changes. In Ares native task_route selects Sol-6.1-Jev or Luna max before spawn."
+model = "gpt-6.1-sol"
+model_reasoning_effort = "medium"
+sandbox_mode = "workspace-write"
+developer_instructions = "Handle only the assigned simple local code change. Return core, cross-module, failed, or uncertain work to Root for reselection. Respect existing changes, verify the result, and report evidence. The native applied route determines the actual model and effort. Follow project AGENTS.md."
+
+# In upgraded Ares, the native router overrides model/effort after loading this role.

@@ -1,0 +1,25 @@
+node_modules/
+work/
+/References/
+*.key
+.env
+.env.*
+!.env.example
+config.local.json
+.DS_Store
+*.log
+*.tgz
+
+# Private runtime state and local build artifacts
+__pycache__/
+*.pyc
+auth.json
+sessions/
+archived_sessions/
+runs/
+*.sqlite*
+*.jsonl
+/native/
+/dist/
+/release/
+*.tar.gz
